@@ -56,7 +56,7 @@ class SimpleEnv2:
         Move the robot to a initial position, set the object positions based on the seed
         '''
         if seed != None: np.random.seed(seed=0) 
-        q_init = np.deg2rad([0,0,0,0,0,0])
+        q_init = np.deg2rad([180,60,0,60,0,60])
         q_zero,ik_err_stack,ik_info = solve_ik(
             env = self.env,
             joint_names_for_ik = self.joint_names,
@@ -71,16 +71,20 @@ class SimpleEnv2:
         plate_xyz = np.array([0.3, -0.25, 0.82])
         self.env.set_p_base_body(body_name='body_obj_plate_11',p=plate_xyz)
         self.env.set_R_base_body(body_name='body_obj_plate_11',R=np.eye(3,3))
-        # Set object positions
-        obj_xyzs = sample_xyzs(
-            1,
-            x_range   = [+0.32,+0.33],
-            y_range   = [-0.00,+0.02],
-            z_range   = [0.83,0.83],
-            min_dist  = 0.16,
-            xy_margin = 0.0
-        )
-        self.env.set_p_base_body(body_name='body_obj_mug_5',p=obj_xyzs[0,:])
+
+        # Set object positions Red mug
+        # obj_xyzs = sample_xyzs(
+        #     1,
+        #     x_range   = [+0.32,+0.33],
+        #     y_range   = [-0.00,+0.02],
+        #     z_range   = [0.83,0.83],
+        #     min_dist  = 0.16,
+        #     xy_margin = 0.0
+        # )
+        # self.env.set_p_base_body(body_name='body_obj_mug_5',p=obj_xyzs[0,:])
+
+        obj_xyz = np.array([0.32, 0.02, 0.83])
+        self.env.set_p_base_body(body_name='body_obj_mug_5',p=obj_xyz)
         self.env.set_R_base_body(body_name='body_obj_mug_5',R=np.eye(3,3))
         obj_xyzs = sample_xyzs(
             1,
