@@ -218,6 +218,7 @@ def run_episode(
     seed: int,
     transform,
     device: str,
+    episode_idx: int = 0,
 ):
     """
     Run one episode.  Returns (success, policy_steps, final_ee_pos, failure_type).
@@ -307,7 +308,7 @@ def run_episode(
         action = action[0, :7].cpu().detach().numpy()
 
         env.step(action)      # sets env.q; applied on next step_env()
-        env.render()          # rgb_agent/rgb_ego already set above
+        env.render(idx=episode_idx)  # rgb_agent/rgb_ego already set above
         policy_steps += 1
 
     # ── collect results ──────────────────────────────────────────────────────
@@ -348,7 +349,7 @@ def print_summary(summary: dict, conditions: list):
     print(f"{'═' * len(header)}\n")
 
     # Failure breakdown
-    print(f"{'Condition':<12} | {'no_grasp':>9} | {'drop':>6} | {'timeout':>8} | {'wrong_place':>12}")
+    print(f"{'Condition':<12} | {'no_grasp':>9} | {'drop':>6} | {'wrong_place':>12}")
     print(sep)
     for cond in conditions:
         name = cond["name"]
@@ -357,10 +358,10 @@ def print_summary(summary: dict, conditions: list):
         rows = [r for r in summary[name] if not r["success"]]
         n    = len(rows) or 1
         counts = {ft: sum(1 for r in rows if r["failure_type"] == ft)
-                  for ft in ("no_grasp", "drop", "timeout", "wrong_place")}
+                  for ft in ("no_grasp", "drop", "wrong_place")}
         print(
             f"{name:<12} | {counts['no_grasp']:>9} | {counts['drop']:>6} | "
-            f"{counts['timeout']:>8} | {counts['wrong_place']:>12}"
+            f"{counts['wrong_place']:>12}"
         )
     print(f"{'═' * len(header)}\n")
 
@@ -445,7 +446,8 @@ def main():
                 return
 
             success, length, final_ee, failure_type = run_episode(
-                env, policy, name, ee_offset_x, seed, transform, DEVICE)
+                env, policy, name, ee_offset_x, seed, transform, DEVICE,
+                episode_idx=already_done + i + 1)
 
             row = {
                 "condition":      name,

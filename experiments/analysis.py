@@ -381,7 +381,7 @@ def print_summary_table(stats: pd.DataFrame):
     print()
     print("-" * col_w)
     header2 = (f"{'Condition':<10} | {'no_grasp':>9} | {'drop':>6} | "
-               f"{'timeout':>8} | {'wrong_place':>12} | {'total_fail':>10}")
+               f"{'wrong_place':>12} | {'total_fail':>10}")
     print(header2)
     print("-" * col_w)
     for _, row in stats.iterrows():
@@ -390,7 +390,6 @@ def print_summary_table(stats: pd.DataFrame):
             f"{row['condition']:<10} | "
             f"{row['no_grasp']:>9} | "
             f"{row['drop']:>6} | "
-            f"{row['timeout']:>8} | "
             f"{row['wrong_place']:>12} | "
             f"{int(total):>10}"
         )

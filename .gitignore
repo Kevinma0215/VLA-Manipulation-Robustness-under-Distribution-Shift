@@ -7,3 +7,6 @@ omy_pnp
 .venv
 wandb
 omy_pnp_language
+
+/experiments/data
+/experiments/media

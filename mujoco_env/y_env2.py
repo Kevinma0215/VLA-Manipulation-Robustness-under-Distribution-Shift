@@ -86,6 +86,7 @@ class SimpleEnv2:
         obj_xyz = np.array([0.32, 0.02, 0.83])
         self.env.set_p_base_body(body_name='body_obj_mug_5',p=obj_xyz)
         self.env.set_R_base_body(body_name='body_obj_mug_5',R=np.eye(3,3))
+
         obj_xyzs = sample_xyzs(
             1,
             x_range   = [+0.29,+0.3],
@@ -116,7 +117,7 @@ class SimpleEnv2:
         Set the instruction for the task
         """
         if given is None:
-            obj_candidates = ['red', 'blue']
+            obj_candidates = ['red'] # 'blue'
             obj1 = random.choice(obj_candidates)
             self.instruction = f'Place the {obj1} mug on the plate.'
             if obj1 == 'red':

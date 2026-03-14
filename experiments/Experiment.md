@@ -27,10 +27,15 @@
 
 ## Running Commands
 
+### Activate env
+```bash
+conda activate lerobot-mujoco-tutorial
+```
+
 ### Interactive viewer (check EE positions before running)
 
 ```bash
-conda run -n lerobot-mujoco-tutorial python setup_viewer.py
+ python setup_viewer.py
 ```
 
 Keyboard controls:
@@ -42,13 +47,13 @@ Keyboard controls:
 
 ```bash
 # Run all 4 conditions × 20 episodes
-conda run -n lerobot-mujoco-tutorial python experiments/eval_runner.py --condition all
+python experiments/eval_runner.py --condition all
 
 # Run a single condition
-conda run -n lerobot-mujoco-tutorial python experiments/eval_runner.py --condition nominal
-conda run -n lerobot-mujoco-tutorial python experiments/eval_runner.py --condition mild
-conda run -n lerobot-mujoco-tutorial python experiments/eval_runner.py --condition medium
-conda run -n lerobot-mujoco-tutorial python experiments/eval_runner.py --condition strong
+python experiments/eval_runner.py --condition nominal
+python experiments/eval_runner.py --condition mild
+python experiments/eval_runner.py --condition medium
+python experiments/eval_runner.py --condition strong
 ```
 
 Results append to `experiments/results.csv` after every episode. If interrupted, re-running automatically resumes from where it left off (skips already-completed seeds).
@@ -56,7 +61,18 @@ Results append to `experiments/results.csv` after every episode. If interrupted,
 ### Analysis plots
 
 ```bash
-conda run -n lerobot-mujoco-tutorial python experiments/analysis.py
+python experiments/analysis.py
+```
+For video record:
+```bash
+# Review all failures for one condition
+ls experiments/media/videos/strong_*fail*
+
+# Review all successes
+ls experiments/media/videos/*success*
+
+# Play any episode
+vlc experiments/media/videos/nominal_seed00_success.mp4
 ```
 
 Outputs four PNG files to `experiments/media/`:
@@ -178,7 +194,7 @@ Run before any experiment session. All checks were validated on 2026-03-13.
 Headless validation script:
 
 ```bash
-conda run -n lerobot-mujoco-tutorial python /tmp/test_mujoco_env_validation.py
+python /tmp/test_mujoco_env_validation.py
 ```
 
 Re-run after any changes to `y_env2.py` or `example_scene_y2.xml`.
