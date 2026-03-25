@@ -17,9 +17,9 @@ import copy
 
 import numpy as np
 
-from mujoco_env.y_env2 import SimpleEnv2
-from mujoco_env.ik import solve_ik
-from mujoco_env.transforms import rpy2r
+from robot.sim_env import SimpleEnv2
+from env.ik import solve_ik
+from env.transforms import rpy2r
 
 # ── constants ─────────────────────────────────────────────────────────────────
 _JOINT_NAMES  = ['joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'joint6']

@@ -248,25 +248,43 @@ def plot_failure_breakdown(stats: pd.DataFrame, out_path: str):
 
 def plot_episode_length(df: pd.DataFrame, out_path: str):
     present = [c for c in CONDITION_ORDER if c in df["condition"].values]
-    data    = [df[df["condition"] == c]["episode_length"].dropna().values
-               for c in present]
 
     fig, ax = plt.subplots(figsize=(7, 4.5))
 
-    bp = ax.boxplot(data, patch_artist=True, notch=False,
+    # box plot uses success episodes only
+    success_data = [
+        df[(df["condition"] == c) & (df["success"] == True)]["episode_length"].dropna().values
+        for c in present
+    ]
+
+    bp = ax.boxplot(success_data, patch_artist=True, notch=False,
                     medianprops={"color": "black", "linewidth": 2},
                     boxprops={"facecolor": "#aec6e8", "alpha": 0.75},
                     whiskerprops={"linewidth": 1.2},
                     capprops={"linewidth": 1.2},
                     flierprops={"marker": "", "markersize": 0})
 
-    # jittered strip
+    # jittered strip: successes as blue dots, failures as red X
     rng = np.random.default_rng(42)
-    for i, vals in enumerate(data):
-        jitter = rng.uniform(-0.15, 0.15, size=len(vals))
-        ax.scatter(np.full(len(vals), i + 1) + jitter, vals,
-                   alpha=0.55, s=28, color="#1f77b4", zorder=3)
+    for i, c in enumerate(present):
+        sub = df[df["condition"] == c].dropna(subset=["episode_length"])
+        succ = sub[sub["success"] == True]["episode_length"].values
+        fail = sub[sub["success"] != True]["episode_length"].values
 
+        if len(succ):
+            jitter = rng.uniform(-0.15, 0.15, size=len(succ))
+            ax.scatter(np.full(len(succ), i + 1) + jitter, succ,
+                       alpha=0.55, s=28, color="#1f77b4", zorder=3,
+                       label="success" if i == 0 else "")
+
+        if len(fail):
+            jitter = rng.uniform(-0.15, 0.15, size=len(fail))
+            ax.scatter(np.full(len(fail), i + 1) + jitter, fail,
+                       alpha=0.8, s=50, color="red", marker="x",
+                       linewidths=1.5, zorder=4,
+                       label="failure" if i == 0 else "")
+
+    ax.legend(fontsize=FONT_SIZE - 1)
     ax.set_xticks(range(1, len(present) + 1))
     ax.set_xticklabels(present, fontsize=FONT_SIZE)
     ax.set_xlabel("Condition", fontsize=FONT_SIZE)

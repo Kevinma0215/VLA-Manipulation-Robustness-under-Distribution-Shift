@@ -18,9 +18,9 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 import copy
 import glfw
-from mujoco_env.y_env2 import SimpleEnv2
-from mujoco_env.ik import solve_ik
-from mujoco_env.transforms import rpy2r, r2rpy
+from robot.sim_env import SimpleEnv2
+from env.ik import solve_ik
+from env.transforms import rpy2r, r2rpy
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIG — edit these to test different conditions

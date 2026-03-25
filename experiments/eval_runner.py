@@ -34,15 +34,8 @@ import numpy as np
 import pandas as pd
 import torch
 from PIL import Image
-from torchvision import transforms
 
-from lerobot.common.datasets.lerobot_dataset import LeRobotDatasetMetadata
-from lerobot.common.policies.smolvla.configuration_smolvla import SmolVLAConfig
-from lerobot.common.policies.smolvla.modeling_smolvla import SmolVLAPolicy
-from lerobot.configs.types import FeatureType
-from lerobot.common.datasets.factory import resolve_delta_timestamps
-from lerobot.common.datasets.utils import dataset_to_policy_features
-
+from policy.smolvla import load_policy, get_img_transform
 from experiments.patched_env import PatchedEnv
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -63,7 +56,6 @@ MAX_WALL_SEC = 60.0        # wall-clock seconds per episode (primary guard)
                            # At ~3–5 Hz real inference, 60 s ≈ 180–300 policy steps
 DEVICE      = 'cuda'
 XML_PATH    = './asset/example_scene_y2.xml'
-POLICY_HUB  = 'Jeongeun/omy_pnp_smolvla'
 RESULTS_CSV = 'experiments/results.csv'
 
 # Object z thresholds for drop detection (from validation: mug starts at z≈0.838)
@@ -141,40 +133,7 @@ class EpisodeRecorder:
         self.frames.clear()
 
 
-# ── policy ────────────────────────────────────────────────────────────────────
-
-def load_policy(device: str) -> SmolVLAPolicy:
-    """Load SmolVLA from HuggingFace, identical to 8.smolvla.ipynb."""
-    try:
-        dataset_metadata = LeRobotDatasetMetadata(
-            "omy_pnp_language", root='./demo_data_example')
-    except Exception:
-        dataset_metadata = LeRobotDatasetMetadata(
-            "omy_pnp_language", root='./omy_pnp_language')
-
-    features        = dataset_to_policy_features(dataset_metadata.features)
-    output_features = {k: v for k, v in features.items() if v.type is FeatureType.ACTION}
-    input_features  = {k: v for k, v in features.items() if k not in output_features}
-
-    cfg = SmolVLAConfig(
-        input_features=input_features,
-        output_features=output_features,
-        chunk_size=5,
-        n_action_steps=5,
-    )
-    policy = SmolVLAPolicy.from_pretrained(
-        POLICY_HUB, config=cfg, dataset_stats=dataset_metadata.stats)
-    policy.to(device)
-    policy.eval()
-    print(f"Policy loaded on {device}.")
-    return policy
-
-
-def get_img_transform():
-    """Identical to get_default_transform() in 8.smolvla.ipynb."""
-    return transforms.Compose([
-        transforms.ToTensor(),   # PIL [0–255] -> FloatTensor [0.0–1.0], C×H×W
-    ])
+# policy loading is in policy/smolvla.py
 
 
 # ── failure classification ─────────────────────────────────────────────────────
@@ -223,7 +182,7 @@ def run_episode(
     """
     Run one episode.  Returns (success, policy_steps, final_ee_pos, failure_type).
 
-    Observation preprocessing matches 8.smolvla.ipynb exactly:
+    Observation preprocessing:
       - grab_image() → (agentview rgb, egocentric rgb)
       - Each image: PIL.fromarray → resize(256,256) → ToTensor
       - observation.state: get_joint_state()[:6]
@@ -246,14 +205,14 @@ def run_episode(
     drop_detected       = False
     t_start             = time.time()
 
-    # ── rollout loop (mirrors notebook) ─────────────────────────────────────
+    # ── rollout loop ─────────────────────────────────────────────────────────
     while env.env.is_viewer_alive():
         env.step_env()                          # advance physics at full rate
 
         if not env.env.loop_every(HZ=20):       # policy runs at 20 Hz
             continue
 
-        # success check (before policy step, same as notebook)
+        # success check (before policy step)
         if env.check_success():
             success = True
             break
