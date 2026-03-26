@@ -1,5 +1,7 @@
 # SmolVLA Pick-and-Place Experiment
 
+![](/experiments/media/results_grid.gif)
+
 Batch evaluation of a pretrained [SmolVLA](https://huggingface.co/Jeongeun/omy_pnp_smolvla) policy on a MuJoCo pick-and-place task under initial end-effector position shifts.
 
 **Task**: pick the red mug and place it on the plate.
@@ -128,8 +130,15 @@ Outputs four plots to `experiments/plots/`:
 
 ---
 
+## Based On
+
+This experiment is built on top of [jeongeun980906/lerobot-mujoco-tutorial](https://github.com/jeongeun980906/lerobot-mujoco-tutorial), which provides the simulation environment, IK utilities, and SmolVLA deployment examples for the Robotis OMY manipulator.
+
+---
+
 ## Acknowledgements
 
+- Upstream tutorial: [jeongeun980906/lerobot-mujoco-tutorial](https://github.com/jeongeun980906/lerobot-mujoco-tutorial)
 - Robot asset: [robotis_mujoco_menagerie](https://github.com/ROBOTIS-GIT/robotis_mujoco_menagerie)
 - MuJoCo parser: modified from [yet-another-mujoco-tutorial](https://github.com/sjchoi86/yet-another-mujoco-tutorial-v3)
 - Object assets: [Objaverse](https://objaverse.allenai.org/)
