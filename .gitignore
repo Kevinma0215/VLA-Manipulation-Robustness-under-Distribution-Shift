@@ -9,4 +9,5 @@ wandb
 omy_pnp_language
 
 /experiments/data
-/experiments/media
+/experiments/media/*.png
+/experiments/media/videos
