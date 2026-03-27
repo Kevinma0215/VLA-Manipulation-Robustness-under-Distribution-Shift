@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vla-manipulation"
+version = "0.1.0"
+description = "VLA Manipulation Robustness under Distribution Shift"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["scripts*", "experiments*", "env*", "robot*", "policy*", "asset*", "demo_data_example*"]
