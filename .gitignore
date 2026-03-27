@@ -11,3 +11,15 @@ omy_pnp_language
 /experiments/data
 /experiments/media/*.png
 /experiments/media/videos
+.env
+*.egg-info/
+
+# Generated outputs
+experiments/media/videos/
+experiments/plots/
+experiments/results_hvla.csv
+*.egg-info/
+
+# Always track these
+!experiments/results.csv
+!experiments/media/results_grid.gif
