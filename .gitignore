@@ -2,7 +2,7 @@ lerobot
 demo_data
 demo_data_language
 ckpt
-asset/objaverse/plate_11
+vla_manipulation/assets/objaverse/plate_11
 omy_pnp
 .venv
 wandb
@@ -11,12 +11,14 @@ omy_pnp_language
 .env
 
 # Generated outputs
-experiments/media/videos/
-experiments/media/old_videos/
-experiments/plots/
-experiments/results_hvla.csv
+experiments/monolithic/media/videos/
+experiments/monolithic/media/old_videos/
+experiments/monolithic/plots/
+experiments/hierarchical/media/videos/
+experiments/hierarchical/plots/
+experiments/comparison/plots/
 *.egg-info/
 
 # Always track these
-!experiments/results.csv
-!experiments/media/results_grid.gif
+!experiments/monolithic/results.csv
+!experiments/monolithic/media/results_grid.gif

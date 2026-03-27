@@ -18,10 +18,15 @@ import seaborn as sns
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIG
 # ──────────────────────────────────────────────────────────────────────────────
-from pathlib import Path
-_REPO_ROOT   = Path(__file__).resolve().parent.parent
-RESULTS_CSV  = str(_REPO_ROOT / 'experiments' / 'results.csv')
-PLOTS_DIR    = str(_REPO_ROOT / 'experiments' / 'plots')
+from vla_manipulation.assets import (
+    MONOLITHIC_RESULTS_CSV,
+    HIERARCHICAL_RESULTS_CSV,
+    MONOLITHIC_PLOTS_DIR,
+    COMPARISON_PLOTS_DIR,
+    ensure_output_dirs,
+)
+RESULTS_CSV  = str(MONOLITHIC_RESULTS_CSV)
+PLOTS_DIR    = str(MONOLITHIC_PLOTS_DIR)
 DPI          = 150
 FONT_SIZE    = 12
 
@@ -66,7 +71,7 @@ def _normalise(df: pd.DataFrame) -> pd.DataFrame:
 
 def load_data(
     results_path: str = RESULTS_CSV,
-    hvla_path: str = str(_REPO_ROOT / 'experiments' / 'results_hvla.csv'),
+    hvla_path: str = str(HIERARCHICAL_RESULTS_CSV),
 ) -> pd.DataFrame | None:
     if not os.path.exists(results_path):
         print(f"[analysis] ERROR: {results_path} not found. Run eval_runner.py first.")
@@ -516,7 +521,7 @@ def print_summary_table(stats: pd.DataFrame):
 
 def main():
     apply_style()
-    os.makedirs(PLOTS_DIR, exist_ok=True)
+    ensure_output_dirs()
 
     df = load_data()
     if df is None:
@@ -545,7 +550,7 @@ def main():
         df_mono, os.path.join(PLOTS_DIR, "episode_length.png"))
     plot_degradation_summary(
         stats, os.path.join(PLOTS_DIR, "degradation_summary.png"))
-    plot_comparison(df, PLOTS_DIR)
+    plot_comparison(df, str(COMPARISON_PLOTS_DIR))
 
     print("\nDone.")
 

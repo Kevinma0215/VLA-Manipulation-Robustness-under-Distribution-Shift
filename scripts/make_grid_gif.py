@@ -5,8 +5,10 @@ import os
 import subprocess
 import sys
 
-VIDEOS_DIR = "experiments/media/videos"
-OUT_GIF    = "experiments/media/results_grid.gif"
+from vla_manipulation.assets import MONOLITHIC_VIDEOS_DIR, MONOLITHIC_MEDIA_DIR
+
+VIDEOS_DIR = str(MONOLITHIC_VIDEOS_DIR)
+OUT_GIF    = str(MONOLITHIC_MEDIA_DIR / "results_grid.gif")
 CELL_W, CELL_H = 256, 128       # each cell (half of original 512×256)
 FPS        = 12
 

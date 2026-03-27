@@ -1,6 +1,6 @@
 # VLA Manipulation Robustness under Distribution Shift
 
-![results grid](experiments/media/results_grid.gif)
+![results grid](experiments/monolithic/media/results_grid.gif)
 
 We study how spatial distribution shift affects two VLA architectures
 on a tabletop pick-and-place task. A monolithic policy (SmolVLA) maps
@@ -57,9 +57,15 @@ lerobot-mujoco-tutorial/
 │   ├── setup_viewer.py
 │   └── make_grid_gif.py
 ├── experiments/                # evaluation outputs (generated)
-│   ├── results.csv             # monolithic results
-│   ├── plots/                  # output PNGs
-│   └── media/                  # episode videos and results GIF
+│   ├── monolithic/             # SmolVLA outputs
+│   │   ├── results.csv
+│   │   ├── plots/
+│   │   └── media/videos/
+│   ├── hierarchical/           # Gemini+IK outputs
+│   │   ├── results.csv
+│   │   ├── plots/
+│   │   └── media/videos/
+│   └── comparison/plots/       # cross-system comparison figures
 ├── asset/                      # scene XML and meshes
 ├── demo_data_example/          # SmolVLA metadata
 └── pyproject.toml
@@ -118,8 +124,9 @@ python scripts/eval_hvla.py --condition nominal
 python scripts/analysis.py
 ```
 
-Outputs to `experiments/plots/`. Generates a comparison plot
-automatically if `results_hvla.csv` is present.
+Outputs to `experiments/monolithic/plots/` (monolithic) and
+`experiments/comparison/plots/` (cross-system). The comparison plot is
+generated automatically if `experiments/hierarchical/results.csv` is present.
 
 ---
 

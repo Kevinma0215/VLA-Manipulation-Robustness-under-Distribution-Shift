@@ -21,7 +21,7 @@ import numpy as np
 
 from vla_manipulation.simulation.patched_env import PatchedEnv
 from vla_manipulation.policy.hierarchical.gemini_planner import GeminiPlanner
-from vla_manipulation.assets import get_scene_xml
+from vla_manipulation.assets import get_scene_xml, HIERARCHICAL_RESULTS_CSV, ensure_output_dirs
 from vla_manipulation.policy.hierarchical.depth_projector import DepthProjector
 from vla_manipulation.policy.hierarchical.trajectory_builder import TrajectoryBuilder
 from vla_manipulation.policy.hierarchical.mujoco_executor import MuJoCoExecutor
@@ -67,7 +67,7 @@ SEEDS        = list(range(N_EPISODES))   # seeds 0..19
 MAX_WALL_SEC = 60.0                      # wall-clock seconds per episode
 
 SCENE_XML   = get_scene_xml()
-RESULTS_CSV = 'experiments/results_hvla.csv'
+RESULTS_CSV = str(HIERARCHICAL_RESULTS_CSV)
 
 # Camera parameters for agentview (from asset/tabletop/object/object_table.xml)
 CAM_NAME    = 'agentview'
@@ -325,6 +325,7 @@ def _print_summary(summary: dict, conditions: list) -> None:
 
 def main() -> None:
     _load_env_file()
+    ensure_output_dirs()
 
     parser = argparse.ArgumentParser(
         description="Hierarchical VLA batch evaluator — EE position shift conditions"

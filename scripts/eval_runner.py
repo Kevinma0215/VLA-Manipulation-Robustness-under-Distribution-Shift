@@ -25,12 +25,17 @@ from PIL import Image
 
 from vla_manipulation.policy.monolithic.smolvla import load_policy, get_img_transform, SmolVLAPolicy
 from vla_manipulation.simulation.patched_env import PatchedEnv
-from vla_manipulation.assets import get_scene_xml
+from vla_manipulation.assets import (
+    get_scene_xml,
+    MONOLITHIC_RESULTS_CSV,
+    MONOLITHIC_VIDEOS_DIR,
+    ensure_output_dirs,
+)
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIG
 # ──────────────────────────────────────────────────────────────────────────────
-VIDEO_DIR   = 'experiments/media/videos'
+VIDEO_DIR   = str(MONOLITHIC_VIDEOS_DIR)
 
 CONDITIONS = [
     {"name": "nominal", "ee_offset_x":  0.00},
@@ -45,7 +50,7 @@ MAX_WALL_SEC = 60.0        # wall-clock seconds per episode (primary guard)
                            # At ~3–5 Hz real inference, 60 s ≈ 180–300 policy steps
 DEVICE      = 'cuda'
 XML_PATH    = get_scene_xml()
-RESULTS_CSV = 'experiments/results.csv'
+RESULTS_CSV = str(MONOLITHIC_RESULTS_CSV)
 
 # Object z thresholds for drop detection (from validation: mug starts at z≈0.838)
 MUG_LIFT_Z  = 0.86   # mug must exceed this to count as "lifted"
@@ -325,6 +330,8 @@ def main():
         help="Run one condition or all (default: all)",
     )
     args = parser.parse_args()
+
+    ensure_output_dirs()
 
     active_conditions = (
         CONDITIONS if args.condition == "all"
