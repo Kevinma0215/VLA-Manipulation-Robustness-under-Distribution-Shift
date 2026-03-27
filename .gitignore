@@ -12,6 +12,7 @@ omy_pnp_language
 
 # Generated outputs
 experiments/media/videos/
+experiments/media/old_videos/
 experiments/plots/
 experiments/results_hvla.csv
 *.egg-info/
