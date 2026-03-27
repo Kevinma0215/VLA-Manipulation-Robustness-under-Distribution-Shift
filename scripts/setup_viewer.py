@@ -11,11 +11,12 @@ import glfw
 from vla_manipulation.envs.sim_env import SimpleEnv2
 from vla_manipulation.envs.ik import solve_ik
 from vla_manipulation.envs.transforms import rpy2r, r2rpy
+from vla_manipulation.assets import get_scene_xml
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIG — edit these to test different conditions
 # ──────────────────────────────────────────────────────────────────────────────
-XML_PATH = './asset/example_scene_y2.xml'
+XML_PATH = get_scene_xml()
 JOINT_NAMES = ['joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'joint6']
 R_TARGET = rpy2r(np.deg2rad([90, -0., 90]))
 

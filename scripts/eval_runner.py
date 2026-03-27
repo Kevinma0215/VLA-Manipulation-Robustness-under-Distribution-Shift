@@ -25,6 +25,7 @@ from PIL import Image
 
 from vla_manipulation.policy.monolithic.smolvla import load_policy, get_img_transform, SmolVLAPolicy
 from vla_manipulation.simulation.patched_env import PatchedEnv
+from vla_manipulation.assets import get_scene_xml
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIG
@@ -43,7 +44,7 @@ MAX_STEPS   = 500          # policy steps before timeout (secondary guard)
 MAX_WALL_SEC = 60.0        # wall-clock seconds per episode (primary guard)
                            # At ~3–5 Hz real inference, 60 s ≈ 180–300 policy steps
 DEVICE      = 'cuda'
-XML_PATH    = './asset/example_scene_y2.xml'
+XML_PATH    = get_scene_xml()
 RESULTS_CSV = 'experiments/results.csv'
 
 # Object z thresholds for drop detection (from validation: mug starts at z≈0.838)

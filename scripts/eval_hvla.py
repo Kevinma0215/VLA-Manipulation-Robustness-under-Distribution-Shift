@@ -21,6 +21,7 @@ import numpy as np
 
 from vla_manipulation.simulation.patched_env import PatchedEnv
 from vla_manipulation.policy.hierarchical.gemini_planner import GeminiPlanner
+from vla_manipulation.assets import get_scene_xml
 from vla_manipulation.policy.hierarchical.depth_projector import DepthProjector
 from vla_manipulation.policy.hierarchical.trajectory_builder import TrajectoryBuilder
 from vla_manipulation.policy.hierarchical.mujoco_executor import MuJoCoExecutor
@@ -65,7 +66,7 @@ N_EPISODES   = 20
 SEEDS        = list(range(N_EPISODES))   # seeds 0..19
 MAX_WALL_SEC = 60.0                      # wall-clock seconds per episode
 
-SCENE_XML   = './asset/example_scene_y2.xml'
+SCENE_XML   = get_scene_xml()
 RESULTS_CSV = 'experiments/results_hvla.csv'
 
 # Camera parameters for agentview (from asset/tabletop/object/object_table.xml)
