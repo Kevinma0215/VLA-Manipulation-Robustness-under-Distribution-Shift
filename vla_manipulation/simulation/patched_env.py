@@ -1,12 +1,5 @@
 """PatchedEnv: adds reset_with_offset, get_ee_position, get_depth, check_success. Canonical location: vla_manipulation/simulation/patched_env.py"""
 
-import sys
-import os
-
-_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, _REPO_ROOT)
-os.chdir(_REPO_ROOT)
-
 import random
 import copy
 
