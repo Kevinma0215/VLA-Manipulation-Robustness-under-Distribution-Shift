@@ -18,8 +18,10 @@ import seaborn as sns
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIG
 # ──────────────────────────────────────────────────────────────────────────────
-RESULTS_CSV  = os.path.join(os.path.dirname(__file__), "results.csv")
-PLOTS_DIR    = os.path.join(os.path.dirname(__file__), "plots")
+from pathlib import Path
+_REPO_ROOT   = Path(__file__).resolve().parent.parent
+RESULTS_CSV  = str(_REPO_ROOT / 'experiments' / 'results.csv')
+PLOTS_DIR    = str(_REPO_ROOT / 'experiments' / 'plots')
 DPI          = 150
 FONT_SIZE    = 12
 
@@ -63,8 +65,8 @@ def _normalise(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_data(
-    results_path: str = "experiments/results.csv",
-    hvla_path: str = "experiments/results_hvla.csv",
+    results_path: str = RESULTS_CSV,
+    hvla_path: str = str(_REPO_ROOT / 'experiments' / 'results_hvla.csv'),
 ) -> pd.DataFrame | None:
     if not os.path.exists(results_path):
         print(f"[analysis] ERROR: {results_path} not found. Run eval_runner.py first.")
