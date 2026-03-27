@@ -1,7 +1,9 @@
 """
-policy/smolvla.py
+Monolithic VLA policy — SmolVLA.
 
-Load the pretrained SmolVLA policy and build the image transform.
+Loads Jeongeun/omy_pnp_smolvla from HuggingFace.
+Dataset metadata is loaded via metadata.py — see that module
+for path resolution details.
 """
 
 import os
@@ -11,23 +13,19 @@ os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True')
 import torch
 from torchvision import transforms
 
-from lerobot.common.datasets.lerobot_dataset import LeRobotDatasetMetadata
 from lerobot.common.policies.smolvla.configuration_smolvla import SmolVLAConfig
 from lerobot.common.policies.smolvla.modeling_smolvla import SmolVLAPolicy
 from lerobot.configs.types import FeatureType
 from lerobot.common.datasets.utils import dataset_to_policy_features
+
+from vla_manipulation.policy.monolithic.metadata import load_omy_pnp_metadata
 
 POLICY_HUB = 'Jeongeun/omy_pnp_smolvla'
 
 
 def load_policy(device: str) -> SmolVLAPolicy:
     """Load SmolVLA from HuggingFace hub (Jeongeun/omy_pnp_smolvla)."""
-    try:
-        dataset_metadata = LeRobotDatasetMetadata(
-            "omy_pnp_language", root='./demo_data_example')
-    except Exception:
-        dataset_metadata = LeRobotDatasetMetadata(
-            "omy_pnp_language", root='./omy_pnp_language')
+    dataset_metadata = load_omy_pnp_metadata()
 
     features        = dataset_to_policy_features(dataset_metadata.features)
     output_features = {k: v for k, v in features.items() if v.type is FeatureType.ACTION}
